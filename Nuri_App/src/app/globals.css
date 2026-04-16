@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+:root {
+  --background: #0a0a0a;
+  --foreground: #ededed;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* ── Map pin markers ── */
+
+.map-pin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.35));
+}
+
+.map-pin:hover {
+  transform: scale(1.12);
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.45));
+}
+
+.map-pin-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: #fff;
+  border-radius: 50%;
+  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a1a1a;
+  user-select: none;
+}
+
+.map-pin-arrow {
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 10px solid #fff;
+  margin-top: -2px;
+}
+
+.map-pin-selected .map-pin-badge {
+  background: #10b981;
+  color: #fff;
+}
+
+.map-pin-selected .map-pin-arrow {
+  border-top-color: #10b981;
+}
+
+.map-pin-selected {
+  transform: scale(1.15);
+}
+
+.map-pin-selected:hover {
+  transform: scale(1.2);
+}
+
+/* Dot markers for restaurants without scores */
+
+.map-dot {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.25);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.map-dot:hover {
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(1.4);
+}
+
+.map-dot-selected {
+  background: #10b981;
+  border-color: #fff;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+/* Fix leaflet marker stacking */
+.leaflet-marker-icon {
+  transition: z-index 0s !important;
+}
