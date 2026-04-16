@@ -30,16 +30,16 @@ export default function PlaceFilters({
 }: Props) {
   return (
     <div
-      className={`flex flex-col gap-2 rounded-xl border border-frame-soft/25 bg-surface/10 px-3 py-2.5 backdrop-blur-md ${disabled ? "opacity-50 pointer-events-none" : ""}`}
+      className={`flex flex-col gap-2 rounded-xl border border-frame-soft/30 bg-surface/18 px-3 py-2.5 backdrop-blur-md ${disabled ? "opacity-50 pointer-events-none" : ""}`}
     >
-      <p className="text-[10px] text-zinc-500 leading-snug">
-        Optional. Leave <span className="text-zinc-400">Min rating</span> and{" "}
-        <span className="text-zinc-400">Price</span> on &ldquo;Any&rdquo; to search everywhere.
+      <p className="text-[10px] text-nuri-dim leading-snug">
+        Optional. Leave <span className="text-nuri-muted">Min rating</span> and{" "}
+        <span className="text-nuri-muted">Price</span> on &ldquo;Any&rdquo; to search everywhere.
       </p>
       <div className="flex flex-col sm:flex-row sm:flex-wrap gap-3 sm:items-end">
       <div className="min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2 mb-1">
-          <span className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold">
+          <span className="text-[10px] uppercase tracking-wider text-nuri-dim font-semibold">
             Min rating
           </span>
           {minRating > 0 && (
@@ -55,7 +55,7 @@ export default function PlaceFilters({
         <MinRatingStars value={minRating} onChange={onMinRatingChange} />
       </div>
       <div className="sm:border-l sm:border-frame-soft sm:pl-3">
-        <div className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1.5">
+        <div className="text-[10px] uppercase tracking-wider text-nuri-dim font-semibold mb-1.5">
           Price
         </div>
         <div className="flex flex-wrap gap-1">
@@ -65,7 +65,7 @@ export default function PlaceFilters({
             className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-colors ${
               priceTier === 0
                 ? "bg-emerald-400 text-emerald-950 shadow-sm shadow-emerald-950/25"
-                : "bg-surface-raised/35 text-zinc-400 backdrop-blur-sm hover:bg-surface-raised-hover/55 hover:text-zinc-200"
+                : "bg-surface-raised/45 text-nuri-muted backdrop-blur-sm hover:bg-surface-raised-hover/60 hover:text-nuri-secondary"
             }`}
           >
             Any
@@ -79,7 +79,7 @@ export default function PlaceFilters({
               className={`rounded-lg px-2.5 py-1 text-[11px] font-mono font-semibold transition-colors ${
                 priceTier === tier
                   ? "bg-emerald-400 text-emerald-950 shadow-sm shadow-emerald-950/25"
-                  : "bg-surface-raised/35 text-zinc-300 backdrop-blur-sm hover:bg-surface-raised-hover/55"
+                  : "bg-surface-raised/45 text-nuri-secondary backdrop-blur-sm hover:bg-surface-raised-hover/60"
               }`}
             >
               {PRICE_LABELS[tier]}
@@ -133,7 +133,7 @@ function MinRatingStars({
           <StarGlyph fill={starFill(i, value)} />
         </span>
       ))}
-      <span className="ml-1 text-[11px] text-zinc-500 tabular-nums">
+      <span className="ml-1 text-[11px] text-nuri-dim tabular-nums">
         {value <= 0 ? "—" : value.toFixed(1)}
       </span>
     </div>
@@ -155,7 +155,7 @@ function starFill(starIndex: number, value: number): "empty" | "half" | "full" {
 function StarGlyph({ fill }: { fill: "empty" | "half" | "full" }) {
   return (
     <span className="pointer-events-none absolute inset-0 flex items-center justify-center text-[22px] leading-none">
-      <span className="text-zinc-600" aria-hidden>
+      <span className="text-nuri-faint" aria-hidden>
         ★
       </span>
       {fill === "full" && (

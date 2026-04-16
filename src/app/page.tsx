@@ -168,7 +168,7 @@ export default function Home() {
   const dietaryInsights = health ? deriveDietaryInsights(health) : [];
 
   return (
-    <main className="min-h-screen text-white">
+    <main className="min-h-screen text-foreground">
       <div className="max-w-[1400px] mx-auto px-4 py-4 flex flex-col gap-3 h-screen max-h-screen">
         {/* ── Top bar ── */}
         <header className="flex items-center justify-between shrink-0 relative z-[2000]">
@@ -216,9 +216,9 @@ export default function Home() {
                 />
               </div>
               <div className="min-w-0">
-                <h2 className="text-xl font-semibold text-zinc-100 leading-tight">Hi Sarah!</h2>
+                <h2 className="text-xl font-semibold text-foreground leading-tight">Hi Sarah!</h2>
                 {bioAge != null && chronAge != null && (
-                  <p className="text-sm text-zinc-500 mt-1">
+                  <p className="text-sm text-nuri-dim mt-1">
                     Age {String(chronAge)} · Bio age{" "}
                     <span className={`font-semibold ${Number(bioAge) <= Number(chronAge) ? "text-emerald-400" : "text-amber-400"}`}>
                       {String(bioAge)}
@@ -248,7 +248,7 @@ export default function Home() {
                   onSelectPlaceId={setSelectedPlaceId}
                 />
               ) : (
-                <div className="h-full bg-surface flex items-center justify-center text-zinc-600 text-sm">
+                <div className="h-full bg-surface flex items-center justify-center text-nuri-faint text-sm">
                   Waiting for location...
                 </div>
               )}
@@ -263,7 +263,7 @@ export default function Home() {
               >
                 <button
                   onClick={() => setSelectedPlaceId(null)}
-                  className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-surface-raised/85 hover:bg-surface-raised-hover flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+                  className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-surface-raised/85 hover:bg-surface-raised-hover flex items-center justify-center text-nuri-muted hover:text-white transition-colors"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg>
                 </button>
@@ -289,7 +289,7 @@ export default function Home() {
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <h3 className="font-semibold text-[15px] leading-tight">{pin.name}</h3>
-                            <div className="flex items-center gap-2.5 mt-1.5 text-xs text-zinc-400 flex-wrap">
+                            <div className="flex items-center gap-2.5 mt-1.5 text-xs text-nuri-muted flex-wrap">
                               {pin.rating != null && pin.rating > 0 && (
                                 <span className="flex items-center gap-1">
                                   <svg width="12" height="12" viewBox="0 0 24 24" fill="#fbbf24" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
@@ -309,7 +309,7 @@ export default function Home() {
                           {pin.healthScore !== undefined && (
                             <div className="text-right shrink-0">
                               <div className="text-2xl font-bold text-emerald-400">{pin.healthScore}</div>
-                              <div className="text-[9px] text-zinc-500 uppercase tracking-wider">score</div>
+                              <div className="text-[9px] text-nuri-dim uppercase tracking-wider">score</div>
                             </div>
                           )}
                         </div>
@@ -331,13 +331,13 @@ export default function Home() {
                                         <span className="text-emerald-400 font-mono text-[11px] font-bold bg-emerald-950 px-1.5 py-0.5 rounded">#{r.rank}</span>
                                       </div>
                                       <div className="text-sm font-semibold leading-snug">{r.dish}</div>
-                                      <div className="text-zinc-400 text-xs">{r.cuisine}</div>
+                                      <div className="text-nuri-muted text-xs">{r.cuisine}</div>
                                     </div>
                                     <div className="text-right shrink-0">
                                       <div className="text-xl font-bold text-emerald-400">{r.healthScore}</div>
                                     </div>
                                   </div>
-                                  <p className="text-zinc-400 text-[11px] leading-relaxed mt-1.5">{r.reason}</p>
+                                  <p className="text-nuri-muted text-[11px] leading-relaxed mt-1.5">{r.reason}</p>
                                 </div>
                               ))}
                             </div>
@@ -345,8 +345,8 @@ export default function Home() {
                         )}
                         {recs.length === 0 && (
                           <div className="px-4 py-8 text-center">
-                            <p className="text-zinc-500 text-sm">No scored dishes at this restaurant</p>
-                            <p className="text-zinc-600 text-xs mt-1">Try a highlighted pin for recommendations</p>
+                            <p className="text-nuri-dim text-sm">No scored dishes at this restaurant</p>
+                            <p className="text-nuri-faint text-xs mt-1">Try a highlighted pin for recommendations</p>
                           </div>
                         )}
                       </div>
@@ -357,7 +357,7 @@ export default function Home() {
 
               {/* Bottom indicator — prompts the user to click a pin */}
               {results && !selectedPlaceId && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-surface/90 backdrop-blur-sm border border-frame/55 rounded-full px-5 py-2.5 text-sm text-zinc-300 shadow-xl whitespace-nowrap">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-surface/90 backdrop-blur-sm border border-frame/55 rounded-full px-5 py-2.5 text-sm text-nuri-secondary shadow-xl whitespace-nowrap">
                   {filteredResults?.length ?? results.length}
                   {(filteredResults?.length ?? results.length) !== results.length
                     ? ` of ${results.length}`
@@ -376,11 +376,11 @@ export default function Home() {
                 onPriceTierChange={setPriceTierFilter}
                 disabled={!location || loading}
               />
-              <div className="flex flex-col gap-3 rounded-2xl border border-frame-soft/80 bg-surface-muted/40 p-3 sm:p-3.5">
+              <div className="flex flex-col gap-3 rounded-2xl border border-frame-soft/80 bg-surface-muted/52 p-3 sm:p-3.5">
                 <button
                   onClick={() => findFood()}
                   disabled={!location || loading}
-                  className="w-full sm:w-auto sm:self-start shrink-0 bg-emerald-600 hover:bg-emerald-500 disabled:bg-surface-raised disabled:text-zinc-500 text-white font-semibold py-2.5 px-6 rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed text-sm shadow-md shadow-emerald-950/30"
+                  className="w-full sm:w-auto sm:self-start shrink-0 bg-emerald-600 hover:bg-emerald-500 disabled:bg-surface-raised disabled:text-nuri-dim text-white font-semibold py-2.5 px-6 rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed text-sm shadow-md shadow-emerald-950/30"
                 >
                   {loading ? "Analyzing..." : location ? "Find Options" : "Waiting..."}
                 </button>
@@ -408,7 +408,7 @@ export default function Home() {
                             </span>
                           </div>
                           {isOpen && (
-                            <p className="text-zinc-400 text-[10px] leading-relaxed mt-2 pt-2 border-t border-frame/45">
+                            <p className="text-nuri-muted text-[10px] leading-relaxed mt-2 pt-2 border-t border-frame/45">
                               {insight.detail}
                             </p>
                           )}
@@ -422,7 +422,7 @@ export default function Home() {
               {loading && (
                 <div className="flex items-center justify-center py-3 gap-3">
                   <div className="animate-spin h-5 w-5 border-2 border-emerald-500 border-t-transparent rounded-full" />
-                  <span className="text-zinc-500 text-sm">
+                  <span className="text-nuri-dim text-sm">
                     Pulling health data & scanning nearby restaurants...
                   </span>
                 </div>
@@ -430,7 +430,7 @@ export default function Home() {
 
               {/* {(recommendationTags.length > 0 || (results && results.length > 0)) && (
                 <div className="flex flex-wrap gap-1.5 items-center">
-                  <span className="text-zinc-500 text-xs mr-1">
+                  <span className="text-nuri-dim text-xs mr-1">
                     {recommendationTags.length > 0 ? "For you:" : "Filter:"}
                   </span>
                   <button
@@ -438,7 +438,7 @@ export default function Home() {
                     onClick={() => findFood()}
                     className={`rounded-full px-2.5 py-1 text-xs transition ${!activeFilter
                       ? "bg-emerald-600 text-white"
-                      : "bg-surface-raised text-zinc-400 hover:bg-surface-raised-hover"
+                      : "bg-surface-raised text-nuri-muted hover:bg-surface-raised-hover"
                       }`}
                   >
                     All
@@ -453,7 +453,7 @@ export default function Home() {
                       onClick={() => findFood(tag)}
                       className={`rounded-full px-2.5 py-1 text-xs transition ${activeFilter === tag
                         ? "bg-emerald-600 text-white"
-                        : "bg-surface-raised text-zinc-400 hover:bg-surface-raised-hover"
+                        : "bg-surface-raised text-nuri-muted hover:bg-surface-raised-hover"
                         }`}
                     >
                       {FILTER_LABELS[tag]}
@@ -467,13 +467,13 @@ export default function Home() {
                   {priorities.map((p) => (
                     <div
                       key={p.label}
-                      className="rounded-xl border border-frame-soft/25 bg-surface/10 p-2.5 backdrop-blur-md"
+                      className="rounded-xl border border-frame-soft/30 bg-surface/18 p-2.5 backdrop-blur-md"
                     >
                       <div className="text-base mb-0.5">{p.icon}</div>
                       <div className="text-[11px] font-semibold text-emerald-400 mb-0.5">
                         {p.label}
                       </div>
-                      <div className="text-[10px] text-zinc-400 leading-snug">
+                      <div className="text-[10px] text-nuri-muted leading-snug">
                         {p.detail}
                       </div>
                     </div>
@@ -483,7 +483,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <footer className="shrink-0 py-1 border-t border-frame-soft text-zinc-600 text-[10px] text-center">
+        <footer className="shrink-0 py-1 border-t border-frame-soft text-nuri-faint text-[10px] text-center">
           Powered by Betterness MCP &middot; Built at OpenClaw Longevity Hackathon
         </footer>
       </div>
@@ -569,8 +569,8 @@ function LocationBar({
   const modes = ["home", "office", "destination", "current"] as const;
   const icons: Record<string, string> = { home: "⌂", office: "◻", destination: "✦", current: "◎" };
 
-  const inputCls = "bg-surface-raised/85 border border-frame/45 rounded-md px-2.5 py-1.5 text-[12px] text-zinc-200 placeholder-zinc-600 outline-none focus:border-emerald-700/60 transition-colors";
-  const selectCls = "bg-surface-raised/85 border border-frame/45 rounded-md px-2 py-1.5 text-[12px] text-zinc-200 outline-none focus:border-emerald-700/60 transition-colors appearance-none cursor-pointer";
+  const inputCls = "bg-surface-raised/85 border border-frame/45 rounded-md px-2.5 py-1.5 text-[12px] text-nuri-secondary placeholder-nuri-dim outline-none focus:border-emerald-700/60 transition-colors";
+  const selectCls = "bg-surface-raised/85 border border-frame/45 rounded-md px-2 py-1.5 text-[12px] text-nuri-secondary outline-none focus:border-emerald-700/60 transition-colors appearance-none cursor-pointer";
 
   return (
     <div className="relative flex items-center gap-1.5">
@@ -608,8 +608,8 @@ function LocationBar({
                 : isActive
                   ? "bg-emerald-600 text-white border-emerald-500 shadow-sm shadow-emerald-900/30"
                   : isEmpty
-                    ? "bg-surface/65 text-zinc-500 border-dashed border-frame hover:border-emerald-500/45 hover:text-zinc-300 cursor-pointer"
-                    : "bg-surface text-zinc-400 border-frame-soft hover:text-zinc-200 hover:border-frame"
+                    ? "bg-surface/65 text-nuri-dim border-dashed border-frame hover:border-emerald-500/45 hover:text-nuri-secondary cursor-pointer"
+                    : "bg-surface text-nuri-muted border-frame-soft hover:text-nuri-secondary hover:border-frame"
             }`}
           >
             <span className="flex items-center gap-1.5">
@@ -617,19 +617,19 @@ function LocationBar({
               {label}
             </span>
             {isEmpty && editing !== mode && (
-              <span className="text-[9px] text-zinc-600 group-hover:text-zinc-400 mt-0.5">Click to set</span>
+              <span className="text-[9px] text-nuri-faint group-hover:text-nuri-muted mt-0.5">Click to set</span>
             )}
             {editing === mode && (
               <span className="text-[9px] text-emerald-400 mt-0.5">Editing...</span>
             )}
             {!isEmpty && !isCurrent && (
-              <span className={`text-[9px] mt-0.5 max-w-[100px] truncate flex items-center gap-1 ${isActive ? "text-emerald-200/70" : "text-zinc-600"}`}>
+              <span className={`text-[9px] mt-0.5 max-w-[100px] truncate flex items-center gap-1 ${isActive ? "text-emerald-200/70" : "text-nuri-faint"}`}>
                 {saved!.address.split(",")[0]}
                 {!isActive && mode !== "office" && (
                   <span
                     role="button"
                     onClick={(e) => { e.stopPropagation(); clearLocation(mode); }}
-                    className="opacity-0 group-hover:opacity-100 text-zinc-500 hover:text-red-400 transition-opacity"
+                    className="opacity-0 group-hover:opacity-100 text-nuri-dim hover:text-red-400 transition-opacity"
                   >
                     ✕
                   </span>
@@ -643,13 +643,13 @@ function LocationBar({
       {editing && (
         <div className="absolute top-full right-0 mt-2 z-[2000] bg-surface border border-frame/55 rounded-xl p-4 shadow-2xl shadow-black/40 w-[340px]">
           <div className="flex items-center justify-between mb-3">
-            <h3 className="text-sm font-semibold text-zinc-200">
+            <h3 className="text-sm font-semibold text-nuri-secondary">
               Set {editing.charAt(0).toUpperCase() + editing.slice(1)} Location
             </h3>
             <button
               type="button"
               onClick={() => { setEditing(null); setForm(EMPTY_FORM); setFormError(null); }}
-              className="text-zinc-500 hover:text-zinc-300 transition-colors"
+              className="text-nuri-dim hover:text-nuri-secondary transition-colors"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg>
             </button>
@@ -657,7 +657,7 @@ function LocationBar({
 
           <div className="space-y-2.5">
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1 block">Street Address</label>
+              <label className="text-[10px] uppercase tracking-wider text-nuri-dim font-semibold mb-1 block">Street Address</label>
               <input
                 ref={streetRef}
                 type="text"
@@ -670,7 +670,7 @@ function LocationBar({
             </div>
 
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1 block">City</label>
+              <label className="text-[10px] uppercase tracking-wider text-nuri-dim font-semibold mb-1 block">City</label>
               <input
                 type="text"
                 value={form.city}
@@ -682,7 +682,7 @@ function LocationBar({
 
             <div className="grid grid-cols-2 gap-2">
               <div>
-                <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1 block">State</label>
+                <label className="text-[10px] uppercase tracking-wider text-nuri-dim font-semibold mb-1 block">State</label>
                 <select
                   value={form.state}
                   onChange={(e) => setForm({ ...form, state: e.target.value })}
@@ -695,7 +695,7 @@ function LocationBar({
                 </select>
               </div>
               <div>
-                <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1 block">Zip Code</label>
+                <label className="text-[10px] uppercase tracking-wider text-nuri-dim font-semibold mb-1 block">Zip Code</label>
                 <input
                   type="text"
                   value={form.zip}
@@ -707,7 +707,7 @@ function LocationBar({
             </div>
 
             <div>
-              <label className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1 block">Country</label>
+              <label className="text-[10px] uppercase tracking-wider text-nuri-dim font-semibold mb-1 block">Country</label>
               <select
                 value={form.country}
                 onChange={(e) => setForm({ ...form, country: e.target.value })}
@@ -732,7 +732,7 @@ function LocationBar({
             <button
               type="button"
               onClick={() => { setEditing(null); setForm(EMPTY_FORM); setFormError(null); }}
-              className="px-3 py-1.5 rounded-lg text-[12px] text-zinc-400 hover:text-zinc-200 border border-frame hover:border-frame transition-colors"
+              className="px-3 py-1.5 rounded-lg text-[12px] text-nuri-muted hover:text-nuri-secondary border border-frame hover:border-frame transition-colors"
             >
               Cancel
             </button>
@@ -740,7 +740,7 @@ function LocationBar({
               type="button"
               onClick={() => saveAddress(editing)}
               disabled={!form.street.trim() || geocoding}
-              className="px-4 py-1.5 rounded-lg text-[12px] font-medium bg-emerald-600 hover:bg-emerald-500 text-white disabled:bg-surface-raised disabled:text-zinc-600 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              className="px-4 py-1.5 rounded-lg text-[12px] font-medium bg-emerald-600 hover:bg-emerald-500 text-white disabled:bg-surface-raised disabled:text-nuri-faint disabled:cursor-not-allowed transition-colors flex items-center gap-2"
             >
               {geocoding && <div className="animate-spin h-3 w-3 border-2 border-white/30 border-t-white rounded-full" />}
               {geocoding ? "Saving..." : "Save Location"}
@@ -758,7 +758,7 @@ function HealthTiles({ health, userAllergies, setUserAllergies }: { health: Heal
   if (!health) {
     return (
       <div className="flex-1 flex items-center justify-center">
-        <div className="text-zinc-600 text-sm animate-pulse">
+        <div className="text-nuri-faint text-sm animate-pulse">
           Loading health data...
         </div>
       </div>
@@ -812,9 +812,9 @@ function HealthTiles({ health, userAllergies, setUserAllergies }: { health: Heal
     return (
       <>
         <AllergyInput allergies={userAllergies} setAllergies={setUserAllergies} />
-        <div className="rounded-xl border border-frame-soft/25 bg-surface/10 p-4 text-center backdrop-blur-md">
-          <p className="text-zinc-400 text-sm mb-1">No health data found</p>
-          <p className="text-zinc-600 text-xs">
+        <div className="rounded-xl border border-frame-soft/30 bg-surface/18 p-4 text-center backdrop-blur-md">
+          <p className="text-nuri-muted text-sm mb-1">No health data found</p>
+          <p className="text-nuri-faint text-xs">
             Connect a wearable on Betterness to see your data here.
             Using demo context for recommendations.
           </p>
@@ -858,7 +858,7 @@ function HealthTiles({ health, userAllergies, setUserAllergies }: { health: Heal
           <div className="space-y-1.5">
             {biomarkers.map((m) => (
               <div key={m.name} className="flex justify-between text-xs">
-                <span className="text-zinc-400">{m.name}</span>
+                <span className="text-nuri-muted">{m.name}</span>
                 <span className={`shrink-0 ${statusColor(m.status)}`}>
                   {m.value}
                   {m.status && m.status !== "normal" && (
@@ -929,7 +929,7 @@ function RawDataDump({ health }: { health: HealthProfile }) {
 
   return (
     <Tile title="Raw Health Data (debug)">
-      <pre className="text-[10px] text-zinc-500 overflow-x-auto whitespace-pre-wrap max-h-48 overflow-y-auto">
+      <pre className="text-[10px] text-nuri-dim overflow-x-auto whitespace-pre-wrap max-h-48 overflow-y-auto">
         {JSON.stringify(health, null, 2)}
       </pre>
     </Tile>
@@ -952,8 +952,8 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
   };
 
   return (
-    <div className="rounded-xl border border-frame-soft/25 bg-surface/10 px-3.5 py-2.5 backdrop-blur-md">
-      <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1.5 font-semibold">
+    <div className="rounded-xl border border-frame-soft/30 bg-surface/18 px-3.5 py-2.5 backdrop-blur-md">
+      <div className="text-[10px] uppercase tracking-wider text-nuri-dim mb-1.5 font-semibold">
         Allergies
       </div>
       {allergies.length > 0 && (
@@ -987,13 +987,13 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
             }
           }}
           placeholder="Add an allergy..."
-          className="flex-1 min-w-0 rounded-lg px-2.5 py-1.5 text-[12px] text-zinc-200 placeholder-zinc-600 outline-none transition-colors bg-surface-raised/25 border border-frame/30 backdrop-blur-sm focus:border-emerald-500/35"
+          className="flex-1 min-w-0 rounded-lg px-2.5 py-1.5 text-[12px] text-nuri-secondary placeholder-nuri-dim outline-none transition-colors bg-surface-raised/35 border border-frame/35 backdrop-blur-sm focus:border-emerald-500/35"
         />
         <button
           type="button"
           onClick={addAllergy}
           disabled={!input.trim()}
-          className="shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-surface-raised/30 border border-frame/30 text-zinc-300 backdrop-blur-sm hover:bg-surface-raised-hover/45 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-surface-raised/40 border border-frame/35 text-nuri-secondary backdrop-blur-sm hover:bg-surface-raised-hover/55 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           Add
         </button>
@@ -1004,8 +1004,8 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
 
 function Tile({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="rounded-xl border border-frame-soft/25 bg-surface/10 px-3.5 py-3 backdrop-blur-md">
-      <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2 font-semibold">
+    <div className="rounded-xl border border-frame-soft/30 bg-surface/18 px-3.5 py-3 backdrop-blur-md">
+      <div className="text-[10px] uppercase tracking-wider text-nuri-dim mb-2 font-semibold">
         {title}
       </div>
       {children}
@@ -1020,10 +1020,10 @@ function KV({ label, value, flag }: { label: string; value: string; flag?: Healt
     flag === "alert" ? "text-rose-400" :
       flag === "warn" ? "text-amber-400" :
         flag === "good" ? "text-emerald-400" :
-          "text-zinc-200";
+          "text-nuri-secondary";
   return (
     <div className="flex justify-between text-xs">
-      <span className="text-zinc-500">{label}</span>
+      <span className="text-nuri-dim">{label}</span>
       <span className={`font-medium ${valueColor}`}>{value}</span>
     </div>
   );

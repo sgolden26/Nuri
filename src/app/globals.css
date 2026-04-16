@@ -1,16 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  /* Deep forest base — layered gradients in body add lime/forest glow */
-  --background: #050d08;
-  /* Surfaces: same hue as page bg, stepped lighter for cards & controls */
-  --nuri-surface: #132a20;
-  --nuri-surface-muted: #0f1f17;
-  --nuri-surface-raised: #1c3d2e;
-  --nuri-surface-raised-hover: #254a3a;
-  --nuri-frame: #2a4f3c;
-  --nuri-frame-soft: #1a3329;
+  /* Forest base — slightly lifted vs before; gradients add soft lime/forest glow */
+  --background: #0a1610;
+  /* Surfaces: stepped lighter for cards & controls */
+  --nuri-surface: #1a3628;
+  --nuri-surface-muted: #15251d;
+  --nuri-surface-raised: #264a38;
+  --nuri-surface-raised-hover: #2f5a45;
+  --nuri-frame: #365d48;
+  --nuri-frame-soft: #223d32;
   --foreground: #ededed;
+  /* Muted copy — green-tinted grays, higher contrast on forest surfaces */
+  --nuri-text-secondary: #e4f3ec;
+  --nuri-text-muted: #b9d4c8;
+  --nuri-text-dim: #95b5a5;
+  --nuri-text-faint: #768f82;
   /* Brand greens (emerald = lime/forest); amber/yellow = warm orange for warnings */
   --nuri-green: #073824;
   --nuri-profile-ring: #e0f836;
@@ -22,6 +27,10 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-nuri-secondary: var(--nuri-text-secondary);
+  --color-nuri-muted: var(--nuri-text-muted);
+  --color-nuri-dim: var(--nuri-text-dim);
+  --color-nuri-faint: var(--nuri-text-faint);
   --color-surface: var(--nuri-surface);
   --color-surface-muted: var(--nuri-surface-muted);
   --color-surface-raised: var(--nuri-surface-raised);
@@ -55,10 +64,10 @@ body {
   min-height: 100vh;
   background-color: var(--background);
   background-image:
-    radial-gradient(ellipse 135% 95% at 5% 5%, rgba(224, 248, 54, 0.035), transparent 58%),
-    radial-gradient(ellipse 110% 75% at 96% 8%, rgba(7, 56, 36, 0.2), transparent 56%),
-    radial-gradient(ellipse 85% 60% at 82% 96%, rgba(196, 221, 15, 0.028), transparent 58%),
-    radial-gradient(ellipse 115% 90% at 12% 98%, rgba(4, 26, 18, 0.26), transparent 62%);
+    radial-gradient(ellipse 135% 95% at 5% 5%, rgba(224, 248, 54, 0.048), transparent 58%),
+    radial-gradient(ellipse 110% 75% at 96% 8%, rgba(7, 56, 36, 0.14), transparent 56%),
+    radial-gradient(ellipse 85% 60% at 82% 96%, rgba(196, 221, 15, 0.04), transparent 58%),
+    radial-gradient(ellipse 115% 90% at 12% 98%, rgba(4, 26, 18, 0.18), transparent 62%);
   background-attachment: fixed;
   color: var(--foreground);
   font-family: var(--font-montserrat), Montserrat, ui-sans-serif, system-ui, sans-serif;
@@ -150,10 +159,10 @@ body {
   background: var(--background) !important;
 }
 .nuri-map .leaflet-tile-pane img.leaflet-tile {
-  filter: sepia(0.2) hue-rotate(68deg) saturate(0.48) brightness(0.89) contrast(1.03);
+  filter: sepia(0.18) hue-rotate(68deg) saturate(0.48) brightness(0.93) contrast(1.02);
 }
 .nuri-map .leaflet-control-attribution {
-  background: rgba(5, 13, 8, 0.75) !important;
+  background: rgba(10, 22, 16, 0.78) !important;
   color: rgba(228, 228, 228, 0.65) !important;
   border: 1px solid rgba(42, 79, 60, 0.45) !important;
   border-radius: 6px;
