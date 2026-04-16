@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from databricks import sql
 import pandas as pd
 
@@ -7,11 +9,26 @@ DOTLAS_RESTAURANTS_TABLE = (
 )
 
 
+def _sql_string_literal(value: str) -> str:
+    """Single-quoted SQL literal; doubles embedded quotes."""
+    return "'" + value.replace("'", "''") + "'"
+
+
+def _normalize_server_hostname(host: str) -> str:
+    """Strip whitespace and optional https:// prefix (connector expects hostname only)."""
+    h = host.strip()
+    if h.lower().startswith("https://"):
+        h = h[8:]
+    elif h.lower().startswith("http://"):
+        h = h[7:]
+    return h.rstrip("/")
+
+
 class DatabricksClient:
     def __init__(self, server_hostname, http_path, access_token):
-        self.server_hostname = server_hostname
-        self.http_path = http_path
-        self.access_token = access_token
+        self.server_hostname = _normalize_server_hostname(server_hostname)
+        self.http_path = (http_path or "").strip()
+        self.access_token = (access_token or "").strip()
 
     def query(self, query: str) -> pd.DataFrame:
         """Run a SQL query and return results as a Pandas DataFrame"""
@@ -31,14 +48,42 @@ class DatabricksClient:
         query = f"SELECT * FROM {table_name} LIMIT {limit}"
         return self.query(query)
 
-    def get_dotlas_restaurants(self, limit: int = 1000) -> pd.DataFrame:
-        """Pull the Dotlas US restaurants Marketplace dataset."""
-        return self.get_table_sample(DOTLAS_RESTAURANTS_TABLE, limit)
+    def get_dotlas_restaurants(
+        self, limit: int | None = 1000, city: str | None = None
+    ) -> pd.DataFrame:
+        """Pull the Dotlas US restaurants Marketplace dataset.
+
+        If ``city`` is set (e.g. ``"San Francisco"``), only rows matching that
+        city (case-insensitive) are returned. Pass ``limit=None`` for no SQL
+        ``LIMIT`` (all matching rows). With a city filter, ``limit`` caps how
+        many rows are returned.
+
+        If ``city`` is omitted, you must pass a positive ``limit`` (random US
+        sample); a full scan of the US table is not allowed.
+        """
+        if city is None:
+            if limit is None:
+                raise ValueError(
+                    "When city is None, pass a positive limit (full US table is too large)."
+                )
+            return self.get_table_sample(DOTLAS_RESTAURANTS_TABLE, limit)
+
+        lit = _sql_string_literal(city)
+        where = f"WHERE LOWER(TRIM(city)) = LOWER(TRIM({lit}))"
+        limit_sql = f" LIMIT {int(limit)}" if limit is not None else ""
+        query = f"SELECT * FROM {DOTLAS_RESTAURANTS_TABLE} {where}{limit_sql}"
+        return self.query(query)
 
 
 if __name__ == "__main__":
     import os
     import sys
+    from pathlib import Path
+
+    from dotenv import load_dotenv
+
+    _root = Path(__file__).resolve().parents[2]
+    load_dotenv(_root / ".env", override=True)
 
     limit = int(sys.argv[1]) if len(sys.argv) > 1 else 50
     host = os.environ.get("DATABRICKS_HOST")

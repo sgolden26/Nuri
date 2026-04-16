@@ -15,15 +15,21 @@ import sys
 from pathlib import Path
 
 import pandas as pd
+from dotenv import load_dotenv
 
 # Allow `import databricks_client` without installing the repo as a package
-_LIB = Path(__file__).resolve().parents[1] / "src" / "lib"
+_ROOT = Path(__file__).resolve().parents[1]
+load_dotenv(_ROOT / ".env", override=True)
+_LIB = _ROOT / "src" / "lib"
 if str(_LIB) not in sys.path:
     sys.path.insert(0, str(_LIB))
 
 from databricks_client import DatabricksClient  # noqa: E402
 
-ROWS = 500  # change this while exploring
+# When CITY is set: ROWS=None loads every matching row (no SQL LIMIT).
+# When CITY is None: set ROWS to a number (random US sample).
+ROWS = None
+CITY = "San Francisco"  # set to None for a random US sample (no city filter)
 
 
 def load_df():
@@ -37,7 +43,7 @@ def load_df():
         )
         sys.exit(1)
     client = DatabricksClient(host, http_path, token)
-    return client.get_dotlas_restaurants(limit=ROWS)
+    return client.get_dotlas_restaurants(limit=ROWS, city=CITY)
 
 
 if __name__ == "__main__":

@@ -936,14 +936,61 @@ function RawDataDump({ health }: { health: HealthProfile }) {
   );
 }
 
+/** Big-9 allergens (FALCPA-style); stored lowercase, `tree_nuts` for display as “tree nuts”. */
+const COMMON_ALLERGEN_KEYS = [
+  "milk",
+  "eggs",
+  "fish",
+  "shellfish",
+  "tree_nuts",
+  "peanuts",
+  "wheat",
+  "soybeans",
+  "sesame",
+] as const;
+
+const COMMON_ALLERGEN_LABEL: Record<(typeof COMMON_ALLERGEN_KEYS)[number], string> = {
+  milk: "Milk",
+  eggs: "Eggs",
+  fish: "Fish",
+  shellfish: "Shellfish",
+  tree_nuts: "Tree nuts",
+  peanuts: "Peanuts",
+  wheat: "Wheat",
+  soybeans: "Soybeans",
+  sesame: "Sesame",
+};
+
+const COMMON_ALLERGEN_SET = new Set<string>(COMMON_ALLERGEN_KEYS);
+
+/** Normalize free-text allergens: lowercase, snake_case, strip junk. */
+function canonicalOtherAllergenKey(raw: string): string {
+  return raw
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "_")
+    .replace(/_+/g, "_")
+    .replace(/^_|_$/g, "");
+}
+
+function formatOtherAllergenDisplay(key: string): string {
+  return key
+    .split("_")
+    .filter(Boolean)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAllergies: (a: string[]) => void }) {
   const [input, setInput] = useState("");
 
-  const addAllergy = () => {
-    const trimmed = input.trim().toLowerCase();
-    if (trimmed && !allergies.includes(trimmed)) {
-      setAllergies([...allergies, trimmed]);
+  const addOtherAllergy = () => {
+    const can = canonicalOtherAllergenKey(input);
+    if (!can || allergies.includes(can) || COMMON_ALLERGEN_SET.has(can)) {
+      setInput("");
+      return;
     }
+    setAllergies([...allergies, can]);
     setInput("");
   };
 
@@ -951,30 +998,56 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
     setAllergies(allergies.filter((a) => a !== allergy));
   };
 
+  const unselectedCommonOrdered = COMMON_ALLERGEN_KEYS.filter((k) => !allergies.includes(k));
+
+  const addCommon = (key: (typeof COMMON_ALLERGEN_KEYS)[number]) => {
+    if (!allergies.includes(key)) {
+      setAllergies([...allergies, key]);
+    }
+  };
+
+  /** Same footprint as common allergen pills (selected + unselected use py-1 / 11px / font-medium). */
+  const selectedAllergenChipClass =
+    "group inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium gap-1 bg-emerald-400/10 border-emerald-400/35 text-emerald-400";
+  const unselectedAllergenButtonClass =
+    "inline-flex items-center rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors bg-surface-raised/35 border-frame/35 text-nuri-muted hover:border-emerald-500/30 hover:text-nuri-secondary";
+
   return (
     <div className="rounded-xl border border-frame-soft/30 bg-surface/18 px-3.5 py-2.5 backdrop-blur-md">
       <div className="text-[10px] uppercase tracking-wider text-nuri-dim mb-1.5 font-semibold">
         Allergies
       </div>
-      {allergies.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mb-2">
-          {allergies.map((a) => (
-            <span
-              key={a}
-              className="group rounded-full bg-emerald-400/10 border border-emerald-400/35 text-emerald-400 px-2.5 py-0.5 text-[11px] flex items-center gap-1"
-            >
-              {a.replace(/_/g, " ")}
+      <div className="flex flex-wrap gap-1.5 mb-2">
+        {allergies.map((key) => {
+          const label = COMMON_ALLERGEN_SET.has(key)
+            ? COMMON_ALLERGEN_LABEL[key as (typeof COMMON_ALLERGEN_KEYS)[number]]
+            : formatOtherAllergenDisplay(key);
+          return (
+            <span key={`s-${key}`} className={selectedAllergenChipClass}>
+              {label}
               <button
                 type="button"
-                onClick={() => removeAllergy(a)}
+                onClick={() => removeAllergy(key)}
                 className="opacity-70 hover:opacity-100 transition-opacity"
+                aria-label={`Remove ${label}`}
               >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg>
               </button>
             </span>
-          ))}
-        </div>
-      )}
+          );
+        })}
+        {unselectedCommonOrdered.map((key) => (
+          <button
+            key={`u-${key}`}
+            type="button"
+            onClick={() => addCommon(key)}
+            className={unselectedAllergenButtonClass}
+          >
+            {COMMON_ALLERGEN_LABEL[key]}
+          </button>
+        ))}
+      </div>
+      <p className="text-[10px] text-nuri-faint mb-1.5">Other</p>
       <div className="flex gap-1.5">
         <input
           type="text"
@@ -983,15 +1056,15 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              addAllergy();
+              addOtherAllergy();
             }
           }}
-          placeholder="Add an allergy..."
+          placeholder="Add another allergy…"
           className="flex-1 min-w-0 rounded-lg px-2.5 py-1.5 text-[12px] text-nuri-secondary placeholder-nuri-dim outline-none transition-colors bg-surface-raised/35 border border-frame/35 backdrop-blur-sm focus:border-emerald-500/35"
         />
         <button
           type="button"
-          onClick={addAllergy}
+          onClick={addOtherAllergy}
           disabled={!input.trim()}
           className="shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-surface-raised/40 border border-frame/35 text-nuri-secondary backdrop-blur-sm hover:bg-surface-raised-hover/55 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
