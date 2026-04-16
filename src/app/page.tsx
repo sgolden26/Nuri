@@ -1,10 +1,17 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import { HealthProfile, FoodRecommendation, MealPriority } from "@/lib/types";
 import { FILTER_LABELS, type FilterKey } from "@/lib/recommendation-filters";
 import Logo from "@/components/logo";
+import { restaurantPinKey } from "@/lib/restaurant-pin";
+import PlaceFilters from "@/components/PlaceFilters";
+import {
+  pinMatchesPlaceFilters,
+  type PriceTierFilter,
+} from "@/lib/place-filters";
+import type { RestaurantPin } from "@/components/ResultsMap";
 
 const ResultsMap = dynamic(() => import("@/components/ResultsMap"), {
   ssr: false,
@@ -16,17 +23,6 @@ const ResultsMap = dynamic(() => import("@/components/ResultsMap"), {
 interface Location {
   lat: number;
   lng: number;
-}
-
-interface RestaurantPin {
-  name: string;
-  lat: number;
-  lng: number;
-  healthScore?: number;
-  photoReference?: string;
-  walkingMinutes?: number;
-  rating?: number;
-  placeId?: string;
 }
 
 function statusColor(s: string) {
@@ -62,7 +58,9 @@ export default function Home() {
   const [activeFilter, setActiveFilter] = useState<FilterKey | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [expandedInsight, setExpandedInsight] = useState<number | null>(null);
-  const [selectedRestaurant, setSelectedRestaurant] = useState<string | null>(null);
+  const [selectedPlaceId, setSelectedPlaceId] = useState<string | null>(null);
+  const [minRatingFilter, setMinRatingFilter] = useState(0);
+  const [priceTierFilter, setPriceTierFilter] = useState<PriceTierFilter>(0);
   const selectedCardRef = useRef<HTMLDivElement>(null);
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -93,10 +91,29 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (selectedRestaurant && selectedCardRef.current) {
+    if (selectedPlaceId && selectedCardRef.current) {
       selectedCardRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-  }, [selectedRestaurant]);
+  }, [selectedPlaceId]);
+
+  const filteredPins = useMemo(() => {
+    if (restaurantPins.length === 0) return [];
+    return restaurantPins.filter((p) =>
+      pinMatchesPlaceFilters(p, minRatingFilter, priceTierFilter),
+    );
+  }, [restaurantPins, minRatingFilter, priceTierFilter]);
+
+  const filteredResults = useMemo(() => {
+    if (!results) return null;
+    const names = new Set(filteredPins.map((p) => p.name));
+    return results.filter((r) => names.has(r.restaurant));
+  }, [results, filteredPins]);
+
+  useEffect(() => {
+    if (!selectedPlaceId) return;
+    const stillVisible = filteredPins.some((p) => restaurantPinKey(p) === selectedPlaceId);
+    if (!stillVisible) setSelectedPlaceId(null);
+  }, [selectedPlaceId, filteredPins]);
 
   useEffect(() => {
     restaurantPins.forEach((pin) => {
@@ -114,7 +131,7 @@ export default function Home() {
       if (!location) return;
       setLoading(true);
       setError(null);
-      setSelectedRestaurant(null);
+      setSelectedPlaceId(null);
       try {
         const res = await fetch("/api/recommend", {
           method: "POST",
@@ -123,6 +140,8 @@ export default function Home() {
             ...location,
             userAllergens: userAllergies.length ? userAllergies : undefined,
             filter: filter ?? undefined,
+            minRating: minRatingFilter > 0 ? minRatingFilter : undefined,
+            priceTier: priceTierFilter > 0 ? priceTierFilter : undefined,
           }),
         });
         if (!res.ok) {
@@ -141,7 +160,7 @@ export default function Home() {
         setLoading(false);
       }
     },
-    [location, userAllergies],
+    [location, userAllergies, minRatingFilter, priceTierFilter],
   );
 
   const bioAge = health ? _deepFind(health.biologicalAge, "biologicalAge") : null;
@@ -224,9 +243,9 @@ export default function Home() {
                 <ResultsMap
                   userLat={location.lat}
                   userLng={location.lng}
-                  restaurants={restaurantPins}
-                  selectedRestaurant={selectedRestaurant}
-                  onSelectRestaurant={setSelectedRestaurant}
+                  restaurants={filteredPins}
+                  selectedPlaceId={selectedPlaceId}
+                  onSelectPlaceId={setSelectedPlaceId}
                 />
               ) : (
                 <div className="h-full bg-zinc-900 flex items-center justify-center text-zinc-600 text-sm">
@@ -237,22 +256,22 @@ export default function Home() {
               {/* Floating sidebar — slides in from right on pin click */}
               <div
                 ref={sidebarRef}
-                className={`absolute top-0 right-0 h-full w-[380px] bg-zinc-950/[.97] backdrop-blur-xl border-l border-zinc-800/50 transform transition-transform duration-300 ease-out z-[1000] flex flex-col ${selectedRestaurant && results
+                className={`absolute top-0 right-0 h-full w-[380px] bg-zinc-950/[.97] backdrop-blur-xl border-l border-zinc-800/50 transform transition-transform duration-300 ease-out z-[1000] flex flex-col ${selectedPlaceId && results
                     ? "translate-x-0"
                     : "translate-x-full pointer-events-none"
                   }`}
               >
                 <button
-                  onClick={() => setSelectedRestaurant(null)}
+                  onClick={() => setSelectedPlaceId(null)}
                   className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-zinc-800/80 hover:bg-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg>
                 </button>
 
                 {(() => {
-                  const pin = restaurantPins.find((p) => p.name === selectedRestaurant);
+                  const pin = filteredPins.find((p) => restaurantPinKey(p) === selectedPlaceId);
                   if (!pin) return null;
-                  const recs = results?.filter((r) => r.restaurant === selectedRestaurant) ?? [];
+                  const recs = filteredResults?.filter((r) => r.restaurant === pin.name) ?? [];
                   return (
                     <>
                       {pin.photoReference ? (
@@ -270,11 +289,16 @@ export default function Home() {
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <h3 className="font-semibold text-[15px] leading-tight">{pin.name}</h3>
-                            <div className="flex items-center gap-2.5 mt-1.5 text-xs text-zinc-400">
+                            <div className="flex items-center gap-2.5 mt-1.5 text-xs text-zinc-400 flex-wrap">
                               {pin.rating != null && pin.rating > 0 && (
                                 <span className="flex items-center gap-1">
                                   <svg width="12" height="12" viewBox="0 0 24 24" fill="#fbbf24" stroke="none"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
                                   {pin.rating}
+                                </span>
+                              )}
+                              {pin.priceLevel != null && pin.priceLevel > 0 && (
+                                <span className="text-emerald-500/90 font-mono font-semibold tracking-tight">
+                                  {"$".repeat(Math.min(4, pin.priceLevel))}
                                 </span>
                               )}
                               {pin.walkingMinutes != null && (
@@ -332,15 +356,26 @@ export default function Home() {
               </div>
 
               {/* Bottom indicator — prompts the user to click a pin */}
-              {results && !selectedRestaurant && (
+              {results && !selectedPlaceId && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-zinc-900/90 backdrop-blur-sm border border-zinc-700/60 rounded-full px-5 py-2.5 text-sm text-zinc-300 shadow-xl whitespace-nowrap">
-                  {results.length} results &middot; Click a pin to explore
+                  {filteredResults?.length ?? results.length}
+                  {(filteredResults?.length ?? results.length) !== results.length
+                    ? ` of ${results.length}`
+                    : ""}{" "}
+                  results &middot; Click a pin to explore
                 </div>
               )}
             </div>
 
-            {/* Bottom bar: button + insights + filters + priorities */}
+            {/* Bottom bar: filters (before find) + button + insights + priorities */}
             <div className="shrink-0 space-y-2">
+              <PlaceFilters
+                minRating={minRatingFilter}
+                onMinRatingChange={setMinRatingFilter}
+                priceTier={priceTierFilter}
+                onPriceTierChange={setPriceTierFilter}
+                disabled={!location || loading}
+              />
               <div className="flex items-stretch gap-2">
                 <button
                   onClick={() => findFood()}

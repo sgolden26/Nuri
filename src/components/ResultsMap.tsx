@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Circle, useMapEvents, useMap } from "r
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useEffect } from "react";
+import { restaurantPinKey } from "@/lib/restaurant-pin";
 
 export interface RestaurantPin {
   name: string;
@@ -13,6 +14,8 @@ export interface RestaurantPin {
   photoReference?: string;
   walkingMinutes?: number;
   rating?: number;
+  /** Google Places price_level 0–4 ($ to $$$$); 0 = unknown */
+  priceLevel?: number;
   placeId?: string;
 }
 
@@ -20,8 +23,8 @@ interface Props {
   userLat: number;
   userLng: number;
   restaurants: RestaurantPin[];
-  selectedRestaurant: string | null;
-  onSelectRestaurant: (name: string | null) => void;
+  selectedPlaceId: string | null;
+  onSelectPlaceId: (id: string | null) => void;
 }
 
 const userIcon = new L.DivIcon({
@@ -66,8 +69,8 @@ export default function ResultsMap({
   userLat,
   userLng,
   restaurants,
-  selectedRestaurant,
-  onSelectRestaurant,
+  selectedPlaceId,
+  onSelectPlaceId,
 }: Props) {
   return (
     <MapContainer
@@ -81,7 +84,7 @@ export default function ResultsMap({
         url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
       />
       <FlyToLocation lat={userLat} lng={userLng} />
-      <DeselectOnMapClick onDeselect={() => onSelectRestaurant(null)} />
+      <DeselectOnMapClick onDeselect={() => onSelectPlaceId(null)} />
       <Circle
         center={[userLat, userLng]}
         radius={1600}
@@ -94,20 +97,21 @@ export default function ResultsMap({
       />
       <Marker position={[userLat, userLng]} icon={userIcon} />
       {restaurants.map((r) => {
-        const isSelected = r.name === selectedRestaurant;
+        const id = restaurantPinKey(r);
+        const isSelected = id === selectedPlaceId;
         const icon =
           r.healthScore !== undefined
             ? scorePinIcon(r.healthScore, isSelected)
             : dotPinIcon(isSelected);
         return (
           <Marker
-            key={r.name}
+            key={id}
             position={[r.lat, r.lng]}
             icon={icon}
             zIndexOffset={isSelected ? 1000 : r.healthScore !== undefined ? 100 : 0}
             eventHandlers={{
               click: () => {
-                onSelectRestaurant(isSelected ? null : r.name);
+                onSelectPlaceId(isSelected ? null : id);
               },
             }}
           />

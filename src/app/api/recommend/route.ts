@@ -12,12 +12,20 @@ import {
 } from "@/lib/recommendation-filters";
 import { softRerank } from "@/lib/reranking";
 import type { UserStateInput } from "@/lib/user-state";
+import {
+  parsePlaceFilterBody,
+  pinMatchesPlaceFilters,
+} from "@/lib/place-filters";
 
 export interface RecommendBody {
   lat: number;
   lng: number;
   /** Filter by dimension (e.g. low_sodium) — shows restaurants with matching items */
   filter?: FilterKey;
+  /** 0 or omitted = no minimum Google rating */
+  minRating?: number;
+  /** 0 or omitted = any price tier ($–$$$$) */
+  priceTier?: number;
   userAllergens?: string[];
   userCuisinePreferences?: string[];
   crampsLogged?: boolean;
@@ -44,7 +52,16 @@ function formatReason(rec: { componentScores: Record<string, number>; score: { c
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as RecommendBody;
-    const { lat, lng, filter, userAllergens, userCuisinePreferences, ...stateOverrides } = body;
+    const {
+      lat,
+      lng,
+      filter,
+      userAllergens,
+      userCuisinePreferences,
+      minRating: rawMinRating,
+      priceTier: rawPriceTier,
+      ...stateOverrides
+    } = body;
 
     if (typeof lat !== "number" || typeof lng !== "number") {
       return NextResponse.json(
@@ -53,10 +70,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const [healthProfile, restaurants] = await Promise.all([
+    const { minRating, priceTier } = parsePlaceFilterBody({
+      minRating: rawMinRating,
+      priceTier: rawPriceTier,
+    });
+
+    const [healthProfile, nearbyRestaurants] = await Promise.all([
       getHealthProfile(),
       getNearbyRestaurants(lat, lng),
     ]);
+
+    const restaurants = nearbyRestaurants.filter((r) =>
+      pinMatchesPlaceFilters(
+        { rating: r.rating, priceLevel: r.priceLevel },
+        minRating,
+        priceTier,
+      ),
+    );
 
     const menuItems = getMenuItemsForRestaurants(restaurants);
     const pipelineInput = {
@@ -131,6 +161,7 @@ export async function POST(req: NextRequest) {
         photoReference: r.photoReference,
         walkingMinutes: r.walkingMinutes,
         rating: r.rating,
+        priceLevel: r.priceLevel,
         placeId: r.placeId,
       }));
 
