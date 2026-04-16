@@ -60,18 +60,244 @@
   --color-yellow-400: #fb923c;
 }
 
+/* Animated mesh glow: positions + spread stops morph (Apple-like ebb / flow) */
+@property --orb1-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 6%;
+}
+@property --orb1-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 5%;
+}
+@property --orb1-s {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 58%;
+}
+@property --orb2-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 94%;
+}
+@property --orb2-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 8%;
+}
+@property --orb2-s {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 56%;
+}
+@property --orb3-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 82%;
+}
+@property --orb3-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 94%;
+}
+@property --orb3-s {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 58%;
+}
+@property --orb4-x {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 12%;
+}
+@property --orb4-y {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 96%;
+}
+@property --orb4-s {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 62%;
+}
+@property --mesh-opacity {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+@keyframes nuri-bg-morph {
+  0% {
+    --orb1-x: 2%;
+    --orb1-y: 2%;
+    --orb1-s: 48%;
+    --orb2-x: 98%;
+    --orb2-y: 4%;
+    --orb2-s: 46%;
+    --orb3-x: 88%;
+    --orb3-y: 98%;
+    --orb3-s: 50%;
+    --orb4-x: 4%;
+    --orb4-y: 98%;
+    --orb4-s: 52%;
+    --mesh-opacity: 0.72;
+  }
+  18% {
+    --orb1-x: 28%;
+    --orb1-y: 22%;
+    --orb1-s: 68%;
+    --orb2-x: 62%;
+    --orb2-y: 28%;
+    --orb2-s: 64%;
+    --orb3-x: 98%;
+    --orb3-y: 58%;
+    --orb3-s: 42%;
+    --orb4-x: 32%;
+    --orb4-y: 68%;
+    --orb4-s: 72%;
+    --mesh-opacity: 1;
+  }
+  40% {
+    --orb1-x: 10%;
+    --orb1-y: 8%;
+    --orb1-s: 44%;
+    --orb2-x: 92%;
+    --orb2-y: 10%;
+    --orb2-s: 52%;
+    --orb3-x: 58%;
+    --orb3-y: 92%;
+    --orb3-s: 70%;
+    --orb4-x: 12%;
+    --orb4-y: 78%;
+    --orb4-s: 48%;
+    --mesh-opacity: 0.78;
+  }
+  62% {
+    --orb1-x: 38%;
+    --orb1-y: 12%;
+    --orb1-s: 62%;
+    --orb2-x: 72%;
+    --orb2-y: 42%;
+    --orb2-s: 48%;
+    --orb3-x: 72%;
+    --orb3-y: 88%;
+    --orb3-s: 58%;
+    --orb4-x: 8%;
+    --orb4-y: 92%;
+    --orb4-s: 66%;
+    --mesh-opacity: 0.95;
+  }
+  82% {
+    --orb1-x: 6%;
+    --orb1-y: 38%;
+    --orb1-s: 56%;
+    --orb2-x: 96%;
+    --orb2-y: 8%;
+    --orb2-s: 58%;
+    --orb3-x: 48%;
+    --orb3-y: 72%;
+    --orb3-s: 46%;
+    --orb4-x: 42%;
+    --orb4-y: 96%;
+    --orb4-s: 58%;
+    --mesh-opacity: 0.68;
+  }
+  100% {
+    --orb1-x: 4%;
+    --orb1-y: 4%;
+    --orb1-s: 58%;
+    --orb2-x: 96%;
+    --orb2-y: 6%;
+    --orb2-s: 54%;
+    --orb3-x: 84%;
+    --orb3-y: 96%;
+    --orb3-s: 56%;
+    --orb4-x: 10%;
+    --orb4-y: 96%;
+    --orb4-s: 62%;
+    --mesh-opacity: 1;
+  }
+}
+
+/* Whole mesh slides / scales — reads clearly on top of orb morph */
+@keyframes nuri-bg-sway {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  33% {
+    transform: translate3d(4%, -3%, 0) scale(1.09);
+  }
+  66% {
+    transform: translate3d(-3.5%, 4.5%, 0) scale(1.04);
+  }
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+html {
+  min-height: 100%;
+  background-color: var(--background);
+}
+
 body {
   min-height: 100vh;
-  background-color: var(--background);
-  background-image:
-    radial-gradient(ellipse 135% 95% at 5% 5%, rgba(224, 248, 54, 0.048), transparent 58%),
-    radial-gradient(ellipse 110% 75% at 96% 8%, rgba(7, 56, 36, 0.14), transparent 56%),
-    radial-gradient(ellipse 85% 60% at 82% 96%, rgba(196, 221, 15, 0.04), transparent 58%),
-    radial-gradient(ellipse 115% 90% at 12% 98%, rgba(4, 26, 18, 0.18), transparent 62%);
-  background-attachment: fixed;
+  position: relative;
+  isolation: isolate;
+  background-color: transparent;
   color: var(--foreground);
   font-family: var(--font-montserrat), Montserrat, ui-sans-serif, system-ui, sans-serif;
   line-height: 1.5;
+}
+
+/* Layered forest glow — positions & transparent stops morph (lighter pools breathe) */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -22%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: var(--mesh-opacity);
+  will-change: transform, opacity;
+  background-image:
+    radial-gradient(
+      ellipse 135% 95% at var(--orb1-x) var(--orb1-y),
+      rgba(224, 248, 54, 0.11),
+      transparent var(--orb1-s)
+    ),
+    radial-gradient(
+      ellipse 110% 75% at var(--orb2-x) var(--orb2-y),
+      rgba(7, 56, 36, 0.26),
+      transparent var(--orb2-s)
+    ),
+    radial-gradient(
+      ellipse 85% 60% at var(--orb3-x) var(--orb3-y),
+      rgba(196, 221, 15, 0.09),
+      transparent var(--orb3-s)
+    ),
+    radial-gradient(
+      ellipse 115% 90% at var(--orb4-x) var(--orb4-y),
+      rgba(4, 26, 18, 0.28),
+      transparent var(--orb4-s)
+    );
+  background-attachment: scroll;
+  animation:
+    nuri-bg-morph 288s ease-in-out infinite alternate,
+    nuri-bg-sway 192s ease-in-out infinite alternate;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+    will-change: auto;
+    opacity: 1;
+    background-image:
+      radial-gradient(ellipse 135% 95% at 5% 5%, rgba(224, 248, 54, 0.048), transparent 58%),
+      radial-gradient(ellipse 110% 75% at 96% 8%, rgba(7, 56, 36, 0.14), transparent 56%),
+      radial-gradient(ellipse 85% 60% at 82% 96%, rgba(196, 221, 15, 0.04), transparent 58%),
+      radial-gradient(ellipse 115% 90% at 12% 98%, rgba(4, 26, 18, 0.18), transparent 62%);
+  }
 }
 
 /* ── Map pin markers ── */

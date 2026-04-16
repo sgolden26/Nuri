@@ -3,6 +3,7 @@ Scratch pad for the Dotlas US restaurants dataset (pandas).
 
 Requires: pip install -r requirements.txt
 Env: DATABRICKS_HOST, DATABRICKS_HTTP_PATH, DATABRICKS_TOKEN
+Optional: DOTLAS_RESTAURANTS_TABLE (3-part Unity Catalog name if default missing)
 
 Run from repo root:
   python scripts/dotlas_playground.py
@@ -26,9 +27,9 @@ if str(_LIB) not in sys.path:
 
 from databricks_client import DatabricksClient  # noqa: E402
 
-# When CITY is set: ROWS=None loads every matching row (no SQL LIMIT).
+# When CITY is set: ROWS=None uses default cap (see databricks_client).
 # When CITY is None: set ROWS to a number (random US sample).
-ROWS = None
+ROWS = 10_000
 CITY = "San Francisco"  # set to None for a random US sample (no city filter)
 
 
@@ -43,6 +44,7 @@ def load_df():
         )
         sys.exit(1)
     client = DatabricksClient(host, http_path, token)
+    print("Querying table:", client.dotlas_restaurants_table, file=sys.stderr)
     return client.get_dotlas_restaurants(limit=ROWS, city=CITY)
 
 
