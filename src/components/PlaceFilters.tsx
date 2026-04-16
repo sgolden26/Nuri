@@ -30,7 +30,7 @@ export default function PlaceFilters({
 }: Props) {
   return (
     <div
-      className={`flex flex-col gap-2 rounded-xl border border-zinc-800 bg-zinc-900/80 px-3 py-2.5 ${disabled ? "opacity-50 pointer-events-none" : ""}`}
+      className={`flex flex-col gap-2 rounded-xl border border-frame-soft/25 bg-surface/10 px-3 py-2.5 backdrop-blur-md ${disabled ? "opacity-50 pointer-events-none" : ""}`}
     >
       <p className="text-[10px] text-zinc-500 leading-snug">
         Optional. Leave <span className="text-zinc-400">Min rating</span> and{" "}
@@ -54,7 +54,7 @@ export default function PlaceFilters({
         </div>
         <MinRatingStars value={minRating} onChange={onMinRatingChange} />
       </div>
-      <div className="sm:border-l sm:border-zinc-800 sm:pl-3">
+      <div className="sm:border-l sm:border-frame-soft sm:pl-3">
         <div className="text-[10px] uppercase tracking-wider text-zinc-500 font-semibold mb-1.5">
           Price
         </div>
@@ -64,8 +64,8 @@ export default function PlaceFilters({
             onClick={() => onPriceTierChange(0)}
             className={`rounded-lg px-2.5 py-1 text-[11px] font-medium transition-colors ${
               priceTier === 0
-                ? "bg-emerald-600 text-white"
-                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200"
+                ? "bg-emerald-400 text-emerald-950 shadow-sm shadow-emerald-950/25"
+                : "bg-surface-raised/35 text-zinc-400 backdrop-blur-sm hover:bg-surface-raised-hover/55 hover:text-zinc-200"
             }`}
           >
             Any
@@ -78,8 +78,8 @@ export default function PlaceFilters({
               onClick={() => onPriceTierChange(tier)}
               className={`rounded-lg px-2.5 py-1 text-[11px] font-mono font-semibold transition-colors ${
                 priceTier === tier
-                  ? "bg-emerald-600 text-white"
-                  : "bg-zinc-800 text-zinc-300 hover:bg-zinc-700"
+                  ? "bg-emerald-400 text-emerald-950 shadow-sm shadow-emerald-950/25"
+                  : "bg-surface-raised/35 text-zinc-300 backdrop-blur-sm hover:bg-surface-raised-hover/55"
               }`}
             >
               {PRICE_LABELS[tier]}
@@ -159,13 +159,13 @@ function StarGlyph({ fill }: { fill: "empty" | "half" | "full" }) {
         ★
       </span>
       {fill === "full" && (
-        <span className="absolute inset-0 flex items-center justify-center text-amber-400" aria-hidden>
+        <span className="absolute inset-0 flex items-center justify-center text-emerald-400" aria-hidden>
           ★
         </span>
       )}
       {fill === "half" && (
         <span
-          className="absolute left-0 top-0 flex h-full w-1/2 items-center justify-start overflow-hidden pl-0.5 text-amber-400"
+          className="absolute left-0 top-0 flex h-full w-1/2 items-center justify-start overflow-hidden pl-0.5 text-emerald-400"
           aria-hidden
         >
           <span className="text-[22px] leading-none">★</span>

@@ -28,7 +28,8 @@ interface Props {
 }
 
 const userIcon = new L.DivIcon({
-  html: '<div style="width:16px;height:16px;background:#3b82f6;border:3px solid #fff;border-radius:50%;box-shadow:0 0 10px rgba(59,130,246,.5)"></div>',
+  html:
+    '<div style="width:16px;height:16px;background:#e0f836;border:3px solid #073824;border-radius:50%;box-shadow:0 0 10px rgba(7,56,36,.55),0 0 4px rgba(224,248,54,.4)"></div>',
   iconSize: [16, 16],
   iconAnchor: [8, 8],
   className: "",
@@ -77,7 +78,7 @@ export default function ResultsMap({
       center={[userLat, userLng]}
       zoom={15}
       scrollWheelZoom
-      className="h-full w-full min-h-[300px]"
+      className="nuri-map h-full w-full min-h-[300px]"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
@@ -89,10 +90,11 @@ export default function ResultsMap({
         center={[userLat, userLng]}
         radius={1600}
         pathOptions={{
-          color: "#10b981",
-          fillColor: "#10b981",
-          fillOpacity: 0.04,
-          weight: 1,
+          color: "#e0f836",
+          opacity: 0.28,
+          fillColor: "#073824",
+          fillOpacity: 0.14,
+          weight: 1.5,
         }}
       />
       <Marker position={[userLat, userLng]} icon={userIcon} />

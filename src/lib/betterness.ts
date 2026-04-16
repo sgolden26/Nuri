@@ -223,10 +223,10 @@ const MOCK_PROFILE: HealthProfile = {
     workoutsThisWeek: 3,
   },
   bodyComposition: {
-    weight: 175,
-    bodyFatPct: 18,
-    muscleMass: 140,
-    bmi: 24.2,
+    weight: 115,
+    bodyFatPct: 20,
+    muscleMass: 50,
+    bmi: 19.1,
   },
   biomarkers: {
     vitaminD: { value: 28, unit: "ng/mL", status: "low" },

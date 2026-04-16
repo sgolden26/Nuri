@@ -16,7 +16,7 @@ import type { RestaurantPin } from "@/components/ResultsMap";
 const ResultsMap = dynamic(() => import("@/components/ResultsMap"), {
   ssr: false,
   loading: () => (
-    <div className="h-full rounded-2xl bg-zinc-900 border border-zinc-800 animate-pulse" />
+    <div className="h-full rounded-2xl bg-surface border border-frame-soft animate-pulse" />
   ),
 });
 
@@ -168,7 +168,7 @@ export default function Home() {
   const dietaryInsights = health ? deriveDietaryInsights(health) : [];
 
   return (
-    <main className="min-h-screen bg-[#0a0a0a] text-white">
+    <main className="min-h-screen text-white">
       <div className="max-w-[1400px] mx-auto px-4 py-4 flex flex-col gap-3 h-screen max-h-screen">
         {/* ── Top bar ── */}
         <header className="flex items-center justify-between shrink-0 relative z-[2000]">
@@ -196,10 +196,10 @@ export default function Home() {
           <div className="flex flex-col gap-2.5 pr-1 min-h-0">
             {/* Profile section */}
             <div className="flex items-center gap-4 py-3">
-              <div className="w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-emerald-600 shadow-lg shadow-emerald-900/30">
+              <div className="w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-[var(--nuri-profile-ring)] shadow-lg shadow-[rgba(7,56,36,0.35)]">
                 <img
-                  src="/profile.jpeg"
-                  alt="Charlie"
+                  src="/sarahprofile.jpeg"
+                  alt="Sarah"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const target = e.currentTarget;
@@ -216,7 +216,7 @@ export default function Home() {
                 />
               </div>
               <div className="min-w-0">
-                <h2 className="text-xl font-semibold text-zinc-100 leading-tight">Hi Charlie!</h2>
+                <h2 className="text-xl font-semibold text-zinc-100 leading-tight">Hi Sarah!</h2>
                 {bioAge != null && chronAge != null && (
                   <p className="text-sm text-zinc-500 mt-1">
                     Age {String(chronAge)} · Bio age{" "}
@@ -238,7 +238,7 @@ export default function Home() {
           {/* ── RIGHT: map beside results ── */}
           <div className="flex flex-col gap-3 min-h-0">
             {/* Map with floating sidebar overlay */}
-            <div className="relative flex-1 rounded-2xl overflow-hidden border border-zinc-800 min-h-[300px]">
+            <div className="relative flex-1 rounded-2xl overflow-hidden border border-frame-soft min-h-[300px]">
               {location ? (
                 <ResultsMap
                   userLat={location.lat}
@@ -248,7 +248,7 @@ export default function Home() {
                   onSelectPlaceId={setSelectedPlaceId}
                 />
               ) : (
-                <div className="h-full bg-zinc-900 flex items-center justify-center text-zinc-600 text-sm">
+                <div className="h-full bg-surface flex items-center justify-center text-zinc-600 text-sm">
                   Waiting for location...
                 </div>
               )}
@@ -256,14 +256,14 @@ export default function Home() {
               {/* Floating sidebar — slides in from right on pin click */}
               <div
                 ref={sidebarRef}
-                className={`absolute top-0 right-0 h-full w-[380px] bg-zinc-950/[.97] backdrop-blur-xl border-l border-zinc-800/50 transform transition-transform duration-300 ease-out z-[1000] flex flex-col ${selectedPlaceId && results
+                className={`absolute top-0 right-0 h-full w-[380px] bg-surface/95 backdrop-blur-xl border-l border-frame-soft/60 transform transition-transform duration-300 ease-out z-[1000] flex flex-col ${selectedPlaceId && results
                     ? "translate-x-0"
                     : "translate-x-full pointer-events-none"
                   }`}
               >
                 <button
                   onClick={() => setSelectedPlaceId(null)}
-                  className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-zinc-800/80 hover:bg-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
+                  className="absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-surface-raised/85 hover:bg-surface-raised-hover flex items-center justify-center text-zinc-400 hover:text-white transition-colors"
                 >
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg>
                 </button>
@@ -281,11 +281,11 @@ export default function Home() {
                           className="w-full h-44 object-cover shrink-0"
                         />
                       ) : (
-                        <div className="w-full h-28 bg-gradient-to-br from-emerald-950/60 to-zinc-900 flex items-center justify-center shrink-0">
+                        <div className="w-full h-28 bg-gradient-to-br from-emerald-950/60 to-surface flex items-center justify-center shrink-0">
                           <span className="text-5xl font-black text-emerald-800/20">{pin.name.charAt(0)}</span>
                         </div>
                       )}
-                      <div className="px-4 py-3 border-b border-zinc-800/50 shrink-0">
+                      <div className="px-4 py-3 border-b border-frame-soft/60 shrink-0">
                         <div className="flex items-start justify-between gap-3">
                           <div className="min-w-0">
                             <h3 className="font-semibold text-[15px] leading-tight">{pin.name}</h3>
@@ -357,7 +357,7 @@ export default function Home() {
 
               {/* Bottom indicator — prompts the user to click a pin */}
               {results && !selectedPlaceId && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-zinc-900/90 backdrop-blur-sm border border-zinc-700/60 rounded-full px-5 py-2.5 text-sm text-zinc-300 shadow-xl whitespace-nowrap">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-surface/90 backdrop-blur-sm border border-frame/55 rounded-full px-5 py-2.5 text-sm text-zinc-300 shadow-xl whitespace-nowrap">
                   {filteredResults?.length ?? results.length}
                   {(filteredResults?.length ?? results.length) !== results.length
                     ? ` of ${results.length}`
@@ -376,39 +376,39 @@ export default function Home() {
                 onPriceTierChange={setPriceTierFilter}
                 disabled={!location || loading}
               />
-              <div className="flex items-stretch gap-2">
+              <div className="flex flex-col gap-3 rounded-2xl border border-frame-soft/80 bg-surface-muted/40 p-3 sm:p-3.5">
                 <button
                   onClick={() => findFood()}
                   disabled={!location || loading}
-                  className="shrink-0 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-800 disabled:text-zinc-500 text-white font-semibold py-2.5 px-5 rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed text-sm"
+                  className="w-full sm:w-auto sm:self-start shrink-0 bg-emerald-600 hover:bg-emerald-500 disabled:bg-surface-raised disabled:text-zinc-500 text-white font-semibold py-2.5 px-6 rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed text-sm shadow-md shadow-emerald-950/30"
                 >
                   {loading ? "Analyzing..." : location ? "Find Options" : "Waiting..."}
                 </button>
                 {dietaryInsights.length > 0 && (
-                  <div className="flex gap-1.5 flex-1 min-w-0 items-start">
+                  <div className="flex gap-2 overflow-x-auto pb-0.5 -mx-0.5 px-0.5 sm:flex-wrap sm:overflow-visible [scrollbar-color:rgba(63,63,70,0.5)_transparent] [scrollbar-width:thin]">
                     {dietaryInsights.map((insight, i) => {
-                      const colors = {
-                        amber: { bg: "bg-amber-950/50", bgActive: "bg-amber-950/70", border: "border-amber-800/40", borderActive: "border-amber-700/60", text: "text-amber-300", detail: "text-amber-200/70", dot: "bg-amber-400" },
-                        rose: { bg: "bg-rose-950/50", bgActive: "bg-rose-950/70", border: "border-rose-800/40", borderActive: "border-rose-700/60", text: "text-rose-300", detail: "text-rose-200/70", dot: "bg-rose-400" },
-                        sky: { bg: "bg-sky-950/50", bgActive: "bg-sky-950/70", border: "border-sky-800/40", borderActive: "border-sky-700/60", text: "text-sky-300", detail: "text-sky-200/70", dot: "bg-sky-400" },
-                      }[insight.color];
                       const isOpen = expandedInsight === i;
                       return (
                         <button
                           key={i}
                           type="button"
                           onClick={() => setExpandedInsight(isOpen ? null : i)}
-                          className={`flex-1 min-w-0 rounded-xl border px-2.5 py-1.5 text-left transition-all ${isOpen
-                            ? `${colors.bgActive} ${colors.borderActive}`
-                            : `${colors.bg} ${colors.border} hover:brightness-125`
-                            }`}
+                          className={`min-w-[10.5rem] max-w-[min(100%,18rem)] sm:min-w-0 sm:max-w-none sm:flex-1 snap-start rounded-xl border px-3 py-2 text-left transition-all ${
+                            isOpen
+                              ? "border-emerald-400/40 bg-emerald-950/25 shadow-sm shadow-black/20"
+                              : "border-frame/50 bg-surface/65 hover:border-emerald-500/30 hover:bg-surface/90"
+                          }`}
                         >
-                          <div className="flex items-center gap-1.5">
-                            <span className={`shrink-0 w-1.5 h-1.5 rounded-full ${colors.dot}`} />
-                            <span className={`${colors.text} text-[11px] font-medium ${isOpen ? "" : "truncate"}`}>{insight.label}</span>
+                          <div className="flex items-center gap-2">
+                            <span className="shrink-0 w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
+                            <span
+                              className={`text-emerald-400/95 text-[11px] font-medium leading-snug ${isOpen ? "" : "line-clamp-2 sm:truncate"}`}
+                            >
+                              {insight.label}
+                            </span>
                           </div>
                           {isOpen && (
-                            <p className={`${colors.detail} text-[10px] leading-relaxed mt-1.5 pt-1.5 border-t ${colors.border}`}>
+                            <p className="text-zinc-400 text-[10px] leading-relaxed mt-2 pt-2 border-t border-frame/45">
                               {insight.detail}
                             </p>
                           )}
@@ -438,7 +438,7 @@ export default function Home() {
                     onClick={() => findFood()}
                     className={`rounded-full px-2.5 py-1 text-xs transition ${!activeFilter
                       ? "bg-emerald-600 text-white"
-                      : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                      : "bg-surface-raised text-zinc-400 hover:bg-surface-raised-hover"
                       }`}
                   >
                     All
@@ -453,7 +453,7 @@ export default function Home() {
                       onClick={() => findFood(tag)}
                       className={`rounded-full px-2.5 py-1 text-xs transition ${activeFilter === tag
                         ? "bg-emerald-600 text-white"
-                        : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                        : "bg-surface-raised text-zinc-400 hover:bg-surface-raised-hover"
                         }`}
                     >
                       {FILTER_LABELS[tag]}
@@ -467,7 +467,7 @@ export default function Home() {
                   {priorities.map((p) => (
                     <div
                       key={p.label}
-                      className="bg-zinc-900 border border-zinc-800 rounded-xl p-2.5"
+                      className="rounded-xl border border-frame-soft/25 bg-surface/10 p-2.5 backdrop-blur-md"
                     >
                       <div className="text-base mb-0.5">{p.icon}</div>
                       <div className="text-[11px] font-semibold text-emerald-400 mb-0.5">
@@ -483,7 +483,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        <footer className="shrink-0 py-1 border-t border-zinc-800 text-zinc-600 text-[10px] text-center">
+        <footer className="shrink-0 py-1 border-t border-frame-soft text-zinc-600 text-[10px] text-center">
           Powered by Betterness MCP &middot; Built at OpenClaw Longevity Hackathon
         </footer>
       </div>
@@ -569,8 +569,8 @@ function LocationBar({
   const modes = ["home", "office", "destination", "current"] as const;
   const icons: Record<string, string> = { home: "⌂", office: "◻", destination: "✦", current: "◎" };
 
-  const inputCls = "bg-zinc-800/80 border border-zinc-700/50 rounded-md px-2.5 py-1.5 text-[12px] text-zinc-200 placeholder-zinc-600 outline-none focus:border-emerald-700/60 transition-colors";
-  const selectCls = "bg-zinc-800/80 border border-zinc-700/50 rounded-md px-2 py-1.5 text-[12px] text-zinc-200 outline-none focus:border-emerald-700/60 transition-colors appearance-none cursor-pointer";
+  const inputCls = "bg-surface-raised/85 border border-frame/45 rounded-md px-2.5 py-1.5 text-[12px] text-zinc-200 placeholder-zinc-600 outline-none focus:border-emerald-700/60 transition-colors";
+  const selectCls = "bg-surface-raised/85 border border-frame/45 rounded-md px-2 py-1.5 text-[12px] text-zinc-200 outline-none focus:border-emerald-700/60 transition-colors appearance-none cursor-pointer";
 
   return (
     <div className="relative flex items-center gap-1.5">
@@ -608,8 +608,8 @@ function LocationBar({
                 : isActive
                   ? "bg-emerald-600 text-white border-emerald-500 shadow-sm shadow-emerald-900/30"
                   : isEmpty
-                    ? "bg-zinc-900/60 text-zinc-500 border-dashed border-zinc-700 hover:border-zinc-500 hover:text-zinc-300 cursor-pointer"
-                    : "bg-zinc-900 text-zinc-400 border-zinc-800 hover:text-zinc-200 hover:border-zinc-600"
+                    ? "bg-surface/65 text-zinc-500 border-dashed border-frame hover:border-emerald-500/45 hover:text-zinc-300 cursor-pointer"
+                    : "bg-surface text-zinc-400 border-frame-soft hover:text-zinc-200 hover:border-frame"
             }`}
           >
             <span className="flex items-center gap-1.5">
@@ -641,7 +641,7 @@ function LocationBar({
       })}
 
       {editing && (
-        <div className="absolute top-full right-0 mt-2 z-[2000] bg-zinc-900 border border-zinc-700/60 rounded-xl p-4 shadow-2xl shadow-black/40 w-[340px]">
+        <div className="absolute top-full right-0 mt-2 z-[2000] bg-surface border border-frame/55 rounded-xl p-4 shadow-2xl shadow-black/40 w-[340px]">
           <div className="flex items-center justify-between mb-3">
             <h3 className="text-sm font-semibold text-zinc-200">
               Set {editing.charAt(0).toUpperCase() + editing.slice(1)} Location
@@ -728,11 +728,11 @@ function LocationBar({
             <p className="text-red-400 text-[11px] mt-2">{formError}</p>
           )}
 
-          <div className="flex justify-end gap-2 mt-4 pt-3 border-t border-zinc-800">
+          <div className="flex justify-end gap-2 mt-4 pt-3 border-t border-frame-soft">
             <button
               type="button"
               onClick={() => { setEditing(null); setForm(EMPTY_FORM); setFormError(null); }}
-              className="px-3 py-1.5 rounded-lg text-[12px] text-zinc-400 hover:text-zinc-200 border border-zinc-700 hover:border-zinc-600 transition-colors"
+              className="px-3 py-1.5 rounded-lg text-[12px] text-zinc-400 hover:text-zinc-200 border border-frame hover:border-frame transition-colors"
             >
               Cancel
             </button>
@@ -740,7 +740,7 @@ function LocationBar({
               type="button"
               onClick={() => saveAddress(editing)}
               disabled={!form.street.trim() || geocoding}
-              className="px-4 py-1.5 rounded-lg text-[12px] font-medium bg-emerald-600 hover:bg-emerald-500 text-white disabled:bg-zinc-800 disabled:text-zinc-600 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+              className="px-4 py-1.5 rounded-lg text-[12px] font-medium bg-emerald-600 hover:bg-emerald-500 text-white disabled:bg-surface-raised disabled:text-zinc-600 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
             >
               {geocoding && <div className="animate-spin h-3 w-3 border-2 border-white/30 border-t-white rounded-full" />}
               {geocoding ? "Saving..." : "Save Location"}
@@ -812,7 +812,7 @@ function HealthTiles({ health, userAllergies, setUserAllergies }: { health: Heal
     return (
       <>
         <AllergyInput allergies={userAllergies} setAllergies={setUserAllergies} />
-        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-center">
+        <div className="rounded-xl border border-frame-soft/25 bg-surface/10 p-4 text-center backdrop-blur-md">
           <p className="text-zinc-400 text-sm mb-1">No health data found</p>
           <p className="text-zinc-600 text-xs">
             Connect a wearable on Betterness to see your data here.
@@ -830,7 +830,7 @@ function HealthTiles({ health, userAllergies, setUserAllergies }: { health: Heal
   return (
     <>
       {isDemo && (
-        <div className="bg-amber-950/40 border border-amber-900/50 rounded-lg px-2.5 py-1.5 text-[10px] text-amber-300/80">
+        <div className="rounded-lg border border-amber-900/35 bg-amber-950/20 px-2.5 py-1.5 text-[10px] text-amber-300/80 backdrop-blur-sm">
           Demo profile — connect a wearable for real data
         </div>
       )}
@@ -952,7 +952,7 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
   };
 
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-2.5">
+    <div className="rounded-xl border border-frame-soft/25 bg-surface/10 px-3.5 py-2.5 backdrop-blur-md">
       <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-1.5 font-semibold">
         Allergies
       </div>
@@ -961,13 +961,13 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
           {allergies.map((a) => (
             <span
               key={a}
-              className="group rounded-full bg-amber-950/60 border border-amber-800/40 text-amber-300 px-2.5 py-0.5 text-[11px] flex items-center gap-1"
+              className="group rounded-full bg-emerald-400/10 border border-emerald-400/35 text-emerald-400 px-2.5 py-0.5 text-[11px] flex items-center gap-1"
             >
               {a.replace(/_/g, " ")}
               <button
                 type="button"
                 onClick={() => removeAllergy(a)}
-                className="opacity-60 hover:opacity-100 transition-opacity"
+                className="opacity-70 hover:opacity-100 transition-opacity"
               >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></svg>
               </button>
@@ -987,13 +987,13 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
             }
           }}
           placeholder="Add an allergy..."
-          className="flex-1 min-w-0 bg-zinc-800/60 border border-zinc-700/50 rounded-lg px-2.5 py-1.5 text-[12px] text-zinc-200 placeholder-zinc-600 outline-none focus:border-amber-700/60 transition-colors"
+          className="flex-1 min-w-0 rounded-lg px-2.5 py-1.5 text-[12px] text-zinc-200 placeholder-zinc-600 outline-none transition-colors bg-surface-raised/25 border border-frame/30 backdrop-blur-sm focus:border-emerald-500/35"
         />
         <button
           type="button"
           onClick={addAllergy}
           disabled={!input.trim()}
-          className="shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-amber-900/40 border border-amber-800/40 text-amber-300 hover:bg-amber-900/60 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="shrink-0 px-2.5 py-1.5 rounded-lg text-[11px] font-medium bg-surface-raised/30 border border-frame/30 text-zinc-300 backdrop-blur-sm hover:bg-surface-raised-hover/45 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           Add
         </button>
@@ -1004,7 +1004,7 @@ function AllergyInput({ allergies, setAllergies }: { allergies: string[]; setAll
 
 function Tile({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl px-3.5 py-3">
+    <div className="rounded-xl border border-frame-soft/25 bg-surface/10 px-3.5 py-3 backdrop-blur-md">
       <div className="text-[10px] uppercase tracking-wider text-zinc-500 mb-2 font-semibold">
         {title}
       </div>
@@ -1049,7 +1049,6 @@ function flagValue(label: string, value: unknown): HealthFlag | undefined {
 interface DietaryInsight {
   label: string;
   detail: string;
-  color: "amber" | "rose" | "sky";
 }
 
 function deriveDietaryInsights(health: HealthProfile): DietaryInsight[] {
@@ -1060,40 +1059,40 @@ function deriveDietaryInsights(health: HealthProfile): DietaryInsight[] {
   for (const m of biomarkers) {
     const name = m.name.toLowerCase();
     if (m.status === "low" && name.includes("vitamin d")) {
-      insights.push({ label: "Vitamin D priority", detail: "Your vitamin D is low — looking for fatty fish, eggs, and fortified foods", color: "amber" });
+      insights.push({ label: "Vitamin D priority", detail: "Your vitamin D is low — looking for fatty fish, eggs, and fortified foods" });
     }
     if ((m.status === "borderline" || m.status === "high") && name.includes("ldl")) {
-      insights.push({ label: "Heart-healthy fats", detail: "LDL is elevated — favoring omega-3 rich foods and reduce saturated fat", color: "amber" });
+      insights.push({ label: "Heart-healthy fats", detail: "LDL is elevated — favoring omega-3 rich foods and reduce saturated fat" });
     }
     if (m.status === "high" && name.includes("glucose")) {
-      insights.push({ label: "Blood sugar control", detail: "Glucose is elevated — choosing low-glycemic, fiber-rich options", color: "rose" });
+      insights.push({ label: "Blood sugar control", detail: "Glucose is elevated — choosing low-glycemic, fiber-rich options" });
     }
     if ((m.status === "high" || m.status === "borderline") && name.includes("crp")) {
-      insights.push({ label: "Anti-inflammatory", detail: "CRP suggests inflammation — prioritizing leafy greens and berries", color: "rose" });
+      insights.push({ label: "Anti-inflammatory", detail: "CRP suggests inflammation — prioritizing leafy greens and berries" });
     }
     if (m.status === "low" && name.includes("iron")) {
-      insights.push({ label: "Iron boost", detail: "Iron is low — looking for red meat, spinach, and legumes", color: "amber" });
+      insights.push({ label: "Iron boost", detail: "Iron is low — looking for red meat, spinach, and legumes" });
     }
   }
 
   const sleepScore = Number(d(health.sleep, "sleepScore") ?? d(health.sleep, "score"));
   if (!isNaN(sleepScore) && sleepScore < 75) {
-    insights.push({ label: "Sleep support", detail: "Sleep score is below optimal — seeking magnesium and tryptophan-rich foods", color: "sky" });
+    insights.push({ label: "Sleep support", detail: "Sleep score is below optimal — seeking magnesium and tryptophan-rich foods" });
   }
 
   const workouts = Number(d(health.activity, "workoutsThisWeek") ?? d(health.activity, "workouts"));
   if (!isNaN(workouts) && workouts < 2) {
-    insights.push({ label: "Low exercise", detail: "Fewer workouts this week — finding lighter, nutrient-dense meals", color: "amber" });
+    insights.push({ label: "Low exercise", detail: "Fewer workouts this week — finding lighter, nutrient-dense meals" });
   }
 
   const steps = Number(d(health.activity, "steps"));
   if (!isNaN(steps) && steps < 5000) {
-    insights.push({ label: "Low activity", detail: "Step count is low — looking for lighter meals with sustained energy", color: "amber" });
+    insights.push({ label: "Low activity", detail: "Step count is low — looking for lighter meals with sustained energy" });
   }
 
   const bmi = Number(d(health.bodyComposition, "bmi"));
   if (!isNaN(bmi) && bmi > 28) {
-    insights.push({ label: "Weight management", detail: "BMI is elevated — prioritizing lean protein and high-fiber options", color: "amber" });
+    insights.push({ label: "Weight management", detail: "BMI is elevated — prioritizing lean protein and high-fiber options" });
   }
 
   return insights.slice(0, 3);

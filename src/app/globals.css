@@ -1,20 +1,68 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0a0a0a;
+  /* Deep forest base — layered gradients in body add lime/forest glow */
+  --background: #050d08;
+  /* Surfaces: same hue as page bg, stepped lighter for cards & controls */
+  --nuri-surface: #132a20;
+  --nuri-surface-muted: #0f1f17;
+  --nuri-surface-raised: #1c3d2e;
+  --nuri-surface-raised-hover: #254a3a;
+  --nuri-frame: #2a4f3c;
+  --nuri-frame-soft: #1a3329;
   --foreground: #ededed;
+  /* Brand greens (emerald = lime/forest); amber/yellow = warm orange for warnings */
+  --nuri-green: #073824;
+  --nuri-profile-ring: #e0f836;
+  /* Same as profile ring — primary light green for UI text */
+  --nuri-green-text: var(--nuri-profile-ring);
+  --nuri-gold: #fb923c;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--nuri-surface);
+  --color-surface-muted: var(--nuri-surface-muted);
+  --color-surface-raised: var(--nuri-surface-raised);
+  --color-surface-raised-hover: var(--nuri-surface-raised-hover);
+  --color-frame: var(--nuri-frame);
+  --color-frame-soft: var(--nuri-frame-soft);
+  --font-sans: var(--font-montserrat), Montserrat, ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-montserrat), Montserrat, ui-sans-serif, system-ui, sans-serif;
+  /* Emerald: yellow-chartreuse greens (hue shifted toward yellow, still clearly green) */
+  --color-emerald-200: #f4ffcc;
+  --color-emerald-300: #ebff7a;
+  --color-emerald-400: #e0f836;
+  --color-emerald-500: #c4dd0f;
+  --color-emerald-600: #073824;
+  --color-emerald-700: #062a1b;
+  --color-emerald-800: #052518;
+  --color-emerald-900: #041a12;
+  --color-emerald-950: #020d08;
+  /* Amber/yellow → orange family (vs lime emerald) */
+  --color-amber-200: #ffedd5;
+  --color-amber-300: #fdba74;
+  --color-amber-400: #fb923c;
+  --color-amber-700: #c2410c;
+  --color-amber-800: #9a3412;
+  --color-amber-900: #7c2d12;
+  --color-amber-950: #431407;
+  --color-yellow-400: #fb923c;
 }
 
 body {
-  background: var(--background);
+  min-height: 100vh;
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 135% 95% at 5% 5%, rgba(224, 248, 54, 0.035), transparent 58%),
+    radial-gradient(ellipse 110% 75% at 96% 8%, rgba(7, 56, 36, 0.2), transparent 56%),
+    radial-gradient(ellipse 85% 60% at 82% 96%, rgba(196, 221, 15, 0.028), transparent 58%),
+    radial-gradient(ellipse 115% 90% at 12% 98%, rgba(4, 26, 18, 0.26), transparent 62%);
+  background-attachment: fixed;
   color: var(--foreground);
+  font-family: var(--font-montserrat), Montserrat, ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.5;
 }
 
 /* ── Map pin markers ── */
@@ -41,7 +89,7 @@ body {
   height: 44px;
   background: #fff;
   border-radius: 50%;
-  font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  font-family: var(--font-montserrat), Montserrat, ui-sans-serif, system-ui, sans-serif;
   font-size: 16px;
   font-weight: 800;
   color: #1a1a1a;
@@ -58,12 +106,12 @@ body {
 }
 
 .map-pin-selected .map-pin-badge {
-  background: #10b981;
+  background: var(--nuri-green);
   color: #fff;
 }
 
 .map-pin-selected .map-pin-arrow {
-  border-top-color: #10b981;
+  border-top-color: var(--nuri-green);
 }
 
 .map-pin-selected {
@@ -92,9 +140,27 @@ body {
 }
 
 .map-dot-selected {
-  background: #10b981;
+  background: var(--nuri-green);
   border-color: #fff;
-  box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 8px rgba(7, 56, 36, 0.55);
+}
+
+/* Nuri Leaflet: align raster tiles + empty space with forest UI */
+.nuri-map.leaflet-container {
+  background: var(--background) !important;
+}
+.nuri-map .leaflet-tile-pane img.leaflet-tile {
+  filter: sepia(0.2) hue-rotate(68deg) saturate(0.48) brightness(0.89) contrast(1.03);
+}
+.nuri-map .leaflet-control-attribution {
+  background: rgba(5, 13, 8, 0.75) !important;
+  color: rgba(228, 228, 228, 0.65) !important;
+  border: 1px solid rgba(42, 79, 60, 0.45) !important;
+  border-radius: 6px;
+  font-size: 10px;
+}
+.nuri-map .leaflet-control-attribution a {
+  color: rgba(224, 248, 54, 0.75) !important;
 }
 
 /* Fix leaflet marker stacking */
